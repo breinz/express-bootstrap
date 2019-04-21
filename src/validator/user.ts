@@ -27,6 +27,8 @@ export default class UserValidator {
     public isValidForSignin(): boolean {
         this.validateName();
         this.validateEmail();
+        this.validatePassword();
+        this.validatePasswordRepeat();
 
         return Object.keys(this.errors).length === 0;
     }
@@ -64,6 +66,18 @@ export default class UserValidator {
 
         if (count_user > 0) {
             return this.errors.email = "taken"
+        }
+    }
+
+    validatePassword() {
+        if (!this.user.password || !this.user.password.length) {
+            return this.errors.password = "required";
+        }
+    }
+
+    validatePasswordRepeat() {
+        if (!this.user.password_repeat || !this.user.password_repeat.length || this.user.password != this.user.password_repeat) {
+            return this.errors.password = "dont_match";
         }
     }
 }

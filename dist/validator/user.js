@@ -52,6 +52,8 @@ var UserValidator = /** @class */ (function () {
     UserValidator.prototype.isValidForSignin = function () {
         this.validateName();
         this.validateEmail();
+        this.validatePassword();
+        this.validatePasswordRepeat();
         return Object.keys(this.errors).length === 0;
     };
     /**
@@ -93,6 +95,16 @@ var UserValidator = /** @class */ (function () {
                 }
             });
         });
+    };
+    UserValidator.prototype.validatePassword = function () {
+        if (!this.user.password || !this.user.password.length) {
+            return this.errors.password = "required";
+        }
+    };
+    UserValidator.prototype.validatePasswordRepeat = function () {
+        if (!this.user.password_repeat || !this.user.password_repeat.length || this.user.password != this.user.password_repeat) {
+            return this.errors.password = "dont_match";
+        }
     };
     return UserValidator;
 }());

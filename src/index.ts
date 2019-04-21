@@ -3,7 +3,7 @@ import path from "path"
 import bodyParser from "body-parser"
 import cookieParser from "cookie-parser"
 
-
+import { db } from "./db"
 import frontRouter from "./router/front"
 import adminRouter from "./router/admin"
 

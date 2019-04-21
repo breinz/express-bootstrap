@@ -109,4 +109,43 @@ describe("UserValidator", () => {
             expect(validator.errors.email).toBe("taken");
         })
     })
+
+    describe("validPassword", () => {
+
+        test("should populate errors if empty", () => {
+            const validator = new UserValidator({});
+
+            validator.validatePassword();
+
+            expect(Object.keys(validator.errors).length).not.toBe(0);
+            expect(validator.errors.password).toBe("required");
+        })
+    })
+
+    describe("validatePasswordRepeat", () => {
+
+        test("should populate errors if password_repeat empty", () => {
+            const validator = new UserValidator({});
+
+            validator.validatePasswordRepeat();
+
+            expect(Object.keys(validator.errors).length).not.toBe(0);
+            expect(validator.errors.password).toBe("dont_match");
+
+        })
+
+        test("should populate errors if passwords don't match", () => {
+            const data = {
+                password: "pom",
+                password_repeat: "poi"
+            };
+
+            const validator = new UserValidator(data);
+
+            validator.validatePasswordRepeat();
+
+            expect(Object.keys(validator.errors).length).not.toBe(0);
+            expect(validator.errors.password).toBe("dont_match");
+        })
+    })
 })

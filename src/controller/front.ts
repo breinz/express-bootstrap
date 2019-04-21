@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import User from "../model/user";
 
 export default class FrontController {
 
@@ -25,7 +26,9 @@ export default class FrontController {
      * @param req 
      * @param res 
      */
-    public signin(req: Request, res: Response) {
+    public async signin(req: Request, res: Response) {
+        await User.create(req.body);
+
         res.redirect("/");
     }
 }

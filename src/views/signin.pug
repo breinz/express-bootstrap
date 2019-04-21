@@ -24,6 +24,8 @@ block content
                         label
                             |Password
                             input(type="password", name="password")
+                            if errors.password
+                                .help-text.error=errors.password
                         label
                             |Repeat password
                             input(type="password", name="password_repeat")
