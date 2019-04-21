@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
-var front_1 = __importDefault(require("../controller/front"));
-var frontController = new front_1.default();
+var admin_1 = __importDefault(require("../controller/admin"));
+var adminController = new admin_1.default();
 var router = express_1.default.Router();
-router.get("/", frontController.index);
+router.get("/", adminController.index);
 exports.default = router;
