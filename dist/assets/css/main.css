@@ -2029,7 +2029,5 @@ table.hover:not(.unstriped) tr:nth-of-type(even):hover {
 .table-scroll {
   overflow-x: auto; }
 
-.test {
-  background-color: #fff; }
-  .test h1 {
-    color: burlywood; }
+.error {
+  color: #cc4b37; }

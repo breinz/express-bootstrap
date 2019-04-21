@@ -1,0 +1,6 @@
+import mongoose from "mongoose";
+
+import config from "./config";
+
+export const db = mongoose.createConnection(config.DB, { useNewUrlParser: true });
+
