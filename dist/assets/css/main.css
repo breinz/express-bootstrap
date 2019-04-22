@@ -2250,3 +2250,8 @@ table.hover:not(.unstriped) tr:nth-of-type(even):hover {
 
 .error {
   color: #cc4b37; }
+
+.callout.flash {
+  padding-left: 0;
+  padding-right: 0;
+  border-width: 0 0 1px 0; }
