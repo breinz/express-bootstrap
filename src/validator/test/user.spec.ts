@@ -29,6 +29,43 @@ describe("UserValidator", () => {
         })
     })
 
+    describe("isValidForLogin", () => {
+
+        beforeAll(async () => {
+            await User.create({
+                name: "isValidForLogin",
+                email: "isValidForLogin@test.com",
+                password: "pom"
+            })
+        })
+
+        test("should pass with valid data", async () => {
+            const data = {
+                email: "isValidForLogin@test.com",
+                password: "pom"
+
+            };
+
+            const validator = new UserValidator(data);
+
+            const result = await validator.isValidForLogin();
+
+            expect(result).toBeTruthy();
+        })
+
+        test("should fail with invalid data", async () => {
+            const data = {
+                email: faker.internet.email(),
+                password: "invalid"
+
+            };
+
+            const validator = new UserValidator(data);
+
+            expect(await validator.isValidForLogin()).not.toBeTruthy();
+        })
+    })
+
     describe("validName", () => {
 
         test("shouldn't populate errors with valid data", () => {
@@ -58,35 +95,35 @@ describe("UserValidator", () => {
 
     describe("validEmail", () => {
 
-        test("shouldn't populate errors with valid data", () => {
+        test("shouldn't populate errors with valid data", async () => {
             const data = {
                 email: faker.internet.email()
             }
 
             const validator = new UserValidator(data);
 
-            validator.validateEmail();
+            await validator.validateEmail(true);
 
             expect(Object.keys(validator.errors).length).toBe(0);
         })
 
-        test("should populate errors with empty email", () => {
+        test("should populate errors with empty email", async () => {
             const validator = new UserValidator({});
 
-            validator.validateEmail();
+            await validator.validateEmail(true);
 
             expect(Object.keys(validator.errors).length).toBe(1);
             expect(validator.errors.email).toBe("required");
         })
 
-        test("should populate errors with invalid email", () => {
+        test("should populate errors with invalid email", async () => {
             const data = {
                 email: "pom@pom"
             }
 
             const validator = new UserValidator(data)
 
-            validator.validateEmail();
+            await validator.validateEmail(true);
 
             expect(Object.keys(validator.errors).length).toBe(1);
             expect(validator.errors.email).toBe("invalid");
@@ -103,7 +140,7 @@ describe("UserValidator", () => {
 
             const validator = new UserValidator(data);
 
-            await validator.validateEmail()
+            await validator.validateEmail(true)
 
             expect(Object.keys(validator.errors).length).toBe(1);
             expect(validator.errors.email).toBe("taken");
@@ -146,6 +183,52 @@ describe("UserValidator", () => {
 
             expect(Object.keys(validator.errors).length).not.toBe(0);
             expect(validator.errors.password).toBe("dont_match");
+        })
+    })
+
+    describe("validateLogin", () => {
+
+        beforeAll(async () => {
+            await User.create({
+                email: "login@test.com",
+                password: "pompom"
+            })
+        })
+
+        test("should populate error with email not in db", async () => {
+            const validator = new UserValidator({
+                email: "invalid@test.com",
+                password: "pompom"
+            })
+
+            await validator.validateLogin();
+
+            expect(Object.keys(validator.errors).length).toBe(1);
+            expect(validator.errors.login).toBe("invalid")
+        })
+
+        test("should populate errors with wrong password", async () => {
+            const validator = new UserValidator({
+                email: "login@test.com",
+                password: "invalid"
+            })
+
+            await validator.validateLogin();
+
+            expect(Object.keys(validator.errors).length).toBe(1);
+            expect(validator.errors.login).toBe("invalid")
+        })
+
+        test("should not populate errors with valid data", async () => {
+            const validator = new UserValidator({
+                email: "login@test.com",
+                password: "pompom"
+            })
+
+            await validator.validateLogin();
+
+            expect(Object.keys(validator.errors).length).toBe(0);
+            expect(validator.errors.login).not.toBeDefined()
         })
     })
 })

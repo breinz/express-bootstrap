@@ -12,4 +12,7 @@ var router = express_1.default.Router();
 router.get("/", frontController.index);
 router.get("/signin", frontController.getSignin);
 router.post("/signin", userMiddleware.validSignin, frontController.signin);
+router.get("/login", frontController.getLogin);
+router.post("/login", userMiddleware.validLogin, frontController.login);
+router.get("/logout", frontController.logout);
 exports.default = router;

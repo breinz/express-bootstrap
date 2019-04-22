@@ -46,15 +46,41 @@ var UserValidator = /** @class */ (function () {
         this.errors = {};
     }
     /**
+     * Is the user valid to get logged in
+     */
+    UserValidator.prototype.isValidForLogin = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        this.validateEmail(false);
+                        this.validatePassword();
+                        return [4 /*yield*/, this.validateLogin()];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, Object.keys(this.errors).length === 0];
+                }
+            });
+        });
+    };
+    /**
      * Is the user valid to get signed in
-     *
      */
     UserValidator.prototype.isValidForSignin = function () {
-        this.validateName();
-        this.validateEmail();
-        this.validatePassword();
-        this.validatePasswordRepeat();
-        return Object.keys(this.errors).length === 0;
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        this.validateName();
+                        return [4 /*yield*/, this.validateEmail(true)];
+                    case 1:
+                        _a.sent();
+                        this.validatePassword();
+                        this.validatePasswordRepeat();
+                        return [2 /*return*/, Object.keys(this.errors).length === 0];
+                }
+            });
+        });
     };
     /**
      * Validate the name
@@ -71,7 +97,7 @@ var UserValidator = /** @class */ (function () {
      * -valid email
      * -not taken
      */
-    UserValidator.prototype.validateEmail = function () {
+    UserValidator.prototype.validateEmail = function (checkTaken) {
         return __awaiter(this, void 0, void 0, function () {
             var count_user;
             return __generator(this, function (_a) {
@@ -85,13 +111,15 @@ var UserValidator = /** @class */ (function () {
                         if (!this.email_regex.test(this.user.email)) {
                             return [2 /*return*/, this.errors.email = "invalid"];
                         }
+                        if (!checkTaken) return [3 /*break*/, 2];
                         return [4 /*yield*/, user_1.default.countDocuments({ email: this.user.email })];
                     case 1:
                         count_user = _a.sent();
                         if (count_user > 0) {
                             return [2 /*return*/, this.errors.email = "taken"];
                         }
-                        return [2 /*return*/];
+                        _a.label = 2;
+                    case 2: return [2 /*return*/];
                 }
             });
         });
@@ -105,6 +133,27 @@ var UserValidator = /** @class */ (function () {
         if (!this.user.password_repeat || !this.user.password_repeat.length || this.user.password != this.user.password_repeat) {
             return this.errors.password = "dont_match";
         }
+    };
+    UserValidator.prototype.validateLogin = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var user;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, user_1.default.findOne({ email: this.user.email })];
+                    case 1:
+                        user = _a.sent();
+                        if (!user) {
+                            return [2 /*return*/, this.errors.login = "invalid"];
+                        }
+                        return [4 /*yield*/, user.validatePassword(this.user.password || "")];
+                    case 2:
+                        if (!(_a.sent())) {
+                            return [2 /*return*/, this.errors.login = "invalid"];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return UserValidator;
 }());

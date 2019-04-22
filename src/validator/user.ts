@@ -1,4 +1,4 @@
-import User from "../model/user";
+import User, { UserModel } from "../model/user";
 
 type Data = {
     name?: string,
@@ -21,12 +21,21 @@ export default class UserValidator {
     }
 
     /**
-     * Is the user valid to get signed in
-     * 
+     * Is the user valid to get logged in
      */
-    public isValidForSignin(): boolean {
+    public async isValidForLogin(): Promise<boolean> {
+        this.validateEmail(false);
+        this.validatePassword();
+        await this.validateLogin();
+
+        return Object.keys(this.errors).length === 0;
+    }
+    /**
+     * Is the user valid to get signed in
+     */
+    public async isValidForSignin(): Promise<boolean> {
         this.validateName();
-        this.validateEmail();
+        await this.validateEmail(true);
         this.validatePassword();
         this.validatePasswordRepeat();
 
@@ -50,7 +59,7 @@ export default class UserValidator {
      * -valid email
      * -not taken
      */
-    async validateEmail() {
+    async validateEmail(checkTaken: boolean) {
         // Required
         if (!this.user.email || !this.user.email.length) {
             return this.errors.email = "required"
@@ -61,11 +70,14 @@ export default class UserValidator {
             return this.errors.email = "invalid"
         }
 
-        // Not taken
-        const count_user = await User.countDocuments({ email: this.user.email });
+        if (checkTaken) {
 
-        if (count_user > 0) {
-            return this.errors.email = "taken"
+            // Not taken
+            const count_user = await User.countDocuments({ email: this.user.email });
+
+            if (count_user > 0) {
+                return this.errors.email = "taken"
+            }
         }
     }
 
@@ -78,6 +90,18 @@ export default class UserValidator {
     validatePasswordRepeat() {
         if (!this.user.password_repeat || !this.user.password_repeat.length || this.user.password != this.user.password_repeat) {
             return this.errors.password = "dont_match";
+        }
+    }
+
+    async validateLogin() {
+        const user = await User.findOne({ email: this.user.email }) as UserModel;
+
+        if (!user) {
+            return this.errors.login = "invalid";
+        }
+
+        if (!await user.validatePassword(this.user.password || "")) {
+            return this.errors.login = "invalid";
         }
     }
 }

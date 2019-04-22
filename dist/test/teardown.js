@@ -34,60 +34,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = require("mongoose");
-var bcrypt_1 = __importDefault(require("bcrypt"));
-var config_1 = __importDefault(require("../config"));
-var db_1 = require("../db");
-/**
- * Schema
- */
-var userSchema = new mongoose_1.Schema({
-    name: String,
-    email: String,
-    password: String
-});
-/**
- * Hash the password
- */
-userSchema.pre("save", function (next) {
-    return __awaiter(this, void 0, void 0, function () {
-        var user, _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    user = this;
-                    if (!user.isNew) return [3 /*break*/, 2];
-                    _a = user;
-                    return [4 /*yield*/, bcrypt_1.default.hash(user.password, config_1.default.BCRYPT_SALT)];
-                case 1:
-                    _a.password = _b.sent();
-                    _b.label = 2;
-                case 2:
-                    next();
-                    return [2 /*return*/];
-            }
-        });
+var _this = this;
+var mongoose = require("mongoose");
+module.exports = function () { return __awaiter(_this, void 0, void 0, function () {
+    var connections, _i, connections_1, con;
+    return __generator(this, function (_a) {
+        connections = mongoose.connections;
+        for (_i = 0, connections_1 = connections; _i < connections_1.length; _i++) {
+            con = connections_1[_i];
+            return [2 /*return*/, con.close()];
+        }
+        return [2 /*return*/, mongoose.disconnect()];
     });
-});
-/**
- * Compare the password
- */
-userSchema.methods.validatePassword = function (compare) {
-    return __awaiter(this, void 0, void 0, function () {
-        var user;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    user = this;
-                    return [4 /*yield*/, bcrypt_1.default.compare(compare, user.password)];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
-        });
-    });
-};
-var User = db_1.db.model("User", userSchema);
-exports.default = User;
+}); };

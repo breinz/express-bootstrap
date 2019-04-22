@@ -1,0 +1,25 @@
+extends layout/layout
+
+block content
+    
+    -errors = errors || {}
+    -data = data || {}
+
+    .grid-container
+        .grid-x
+            .cell.small-6.small-offset-3
+                .callout
+                    h1 Login
+                    if error
+                        .callout.alert
+                            p Error logging in, please try again
+                    form(method="post")
+                        label
+                            |Email
+                            input(type="text", name="email" value=data.email autofocus)
+                            
+                        label
+                            |Password
+                            input(type="password", name="password")
+
+                        input.button(type="submit", value="Login")

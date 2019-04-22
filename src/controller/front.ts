@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User from "../model/user";
+import User, { UserModel } from "../model/user";
 
 export default class FrontController {
 
@@ -14,7 +14,40 @@ export default class FrontController {
     }
 
     /**
-     * Get /signin
+     * GET /login
+     * @param req 
+     * @param res 
+     */
+    getLogin(req: Request, res: Response) {
+        res.render("login");
+    }
+
+    /**
+     * POST /login
+     * @param req 
+     * @param res 
+     */
+    public async login(req: Request, res: Response) {
+        const user = await User.findOne({ email: req.body.email }) as UserModel;
+
+        res.cookie("uid", user.id, { maxAge: 1000 * 60 * 60 * 24 * 30 });
+
+        res.redirect("/");
+    }
+
+    /**
+     * Logout
+     * @param req 
+     * @param res 
+     */
+    logout(req: Request, res: Response) {
+        res.clearCookie("uid");
+
+        res.redirect("/");
+    }
+
+    /**
+     * GET /signin
      * @param req 
      * @param res 
      */

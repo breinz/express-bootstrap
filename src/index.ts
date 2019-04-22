@@ -3,9 +3,8 @@ import path from "path"
 import bodyParser from "body-parser"
 import cookieParser from "cookie-parser"
 
-import { db } from "./db"
-import frontRouter from "./router/front"
-import adminRouter from "./router/admin"
+import routers from "./router"
+import { userMiddleware } from "./middleware"
 
 let app = express()
 
@@ -23,9 +22,12 @@ app.use(express.static("dist/assets"));
 app.set("view engine", "pug")
 app.set('views', path.join(__dirname, '../src/views'));
 
+// Check for a logged in user (populates req.current_user & res.locals.current_user)
+app.use(userMiddleware.saveLoggedInUser);
+
 // Route
-app.use("/", frontRouter);
-app.use("/admin", adminRouter);
+app.use("/", routers.front);
+app.use("/admin", routers.admin);
 
 // Start server
 app.listen(3000, "0.0.0.0", () => {

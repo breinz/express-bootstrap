@@ -19,7 +19,12 @@ export type UserModel = Document & {
     /**
      * User's password (hashed)
      */
-    password: string
+    password: string,
+
+    /**
+     * Compare passwords
+     */
+    validatePassword: (compare: string) => boolean
 }
 
 /**
@@ -43,6 +48,15 @@ userSchema.pre("save", async function (next) {
 
     next();
 });
+
+/**
+ * Compare the password
+ */
+userSchema.methods.validatePassword = async function (compare: string) {
+    const user = this as UserModel;
+
+    return await bcrypt.compare(compare, user.password)
+}
 
 const User = db.model("User", userSchema) as Model<Document> & UserModel;
 export default User;
