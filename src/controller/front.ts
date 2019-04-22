@@ -18,7 +18,7 @@ export default class FrontController {
      * @param req 
      * @param res 
      */
-    getLogin(req: Request, res: Response) {
+    public getLogin(req: Request, res: Response) {
         res.render("login");
     }
 
@@ -32,6 +32,8 @@ export default class FrontController {
 
         res.cookie("uid", user.id, { maxAge: 1000 * 60 * 60 * 24 * 30 });
 
+        req.flash("success", "Login success");
+
         res.redirect("/");
     }
 
@@ -42,6 +44,8 @@ export default class FrontController {
      */
     logout(req: Request, res: Response) {
         res.clearCookie("uid");
+
+        req.flash("success", "Logout success");
 
         res.redirect("/");
     }
@@ -61,6 +65,8 @@ export default class FrontController {
      */
     public async signin(req: Request, res: Response) {
         await User.create(req.body);
+
+        req.flash("success", `Signed in successfully. Welcome ${req.body.name}!`)
 
         res.redirect("/");
     }

@@ -57,6 +57,7 @@ var FrontController = (function () {
                     case 1:
                         user = _a.sent();
                         res.cookie("uid", user.id, { maxAge: 1000 * 60 * 60 * 24 * 30 });
+                        req.flash("success", "Login success");
                         res.redirect("/");
                         return [2];
                 }
@@ -65,6 +66,7 @@ var FrontController = (function () {
     };
     FrontController.prototype.logout = function (req, res) {
         res.clearCookie("uid");
+        req.flash("success", "Logout success");
         res.redirect("/");
     };
     FrontController.prototype.getSignin = function (req, res) {
@@ -77,6 +79,7 @@ var FrontController = (function () {
                     case 0: return [4, user_1.default.create(req.body)];
                     case 1:
                         _a.sent();
+                        req.flash("success", "Signed in successfully. Welcome " + req.body.name + "!");
                         res.redirect("/");
                         return [2];
                 }
