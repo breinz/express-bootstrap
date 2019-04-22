@@ -51,7 +51,8 @@ describe("frontController", () => {
                     name: "Signin",
                     email: faker.internet.email(),
                     password: "pom"
-                }
+                },
+                flash: jest.fn()
             };
 
             const res: any = {
@@ -102,7 +103,8 @@ describe("frontController", () => {
             const req: any = {
                 body: {
                     email: data.email
-                }
+                },
+                flash: jest.fn()
             }
 
             const res: any = {
