@@ -39,76 +39,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var user_1 = __importDefault(require("../model/user"));
-var FrontController = /** @class */ (function () {
+var FrontController = (function () {
     function FrontController() {
     }
-    /**
-     * GET /
-     * @param req
-     * @param res
-     */
     FrontController.prototype.index = function (req, res) {
         res.render("index");
     };
-    /**
-     * GET /login
-     * @param req
-     * @param res
-     */
     FrontController.prototype.getLogin = function (req, res) {
         res.render("login");
     };
-    /**
-     * POST /login
-     * @param req
-     * @param res
-     */
     FrontController.prototype.login = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
             var user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, user_1.default.findOne({ email: req.body.email })];
+                    case 0: return [4, user_1.default.findOne({ email: req.body.email })];
                     case 1:
                         user = _a.sent();
                         res.cookie("uid", user.id, { maxAge: 1000 * 60 * 60 * 24 * 30 });
                         res.redirect("/");
-                        return [2 /*return*/];
+                        return [2];
                 }
             });
         });
     };
-    /**
-     * Logout
-     * @param req
-     * @param res
-     */
     FrontController.prototype.logout = function (req, res) {
         res.clearCookie("uid");
         res.redirect("/");
     };
-    /**
-     * GET /signin
-     * @param req
-     * @param res
-     */
     FrontController.prototype.getSignin = function (req, res) {
         res.render("signin");
     };
-    /**
-     * POST /signin
-     * @param req
-     * @param res
-     */
     FrontController.prototype.signin = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, user_1.default.create(req.body)];
+                    case 0: return [4, user_1.default.create(req.body)];
                     case 1:
                         _a.sent();
                         res.redirect("/");
-                        return [2 /*return*/];
+                        return [2];
                 }
             });
         });

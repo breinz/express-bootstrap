@@ -42,17 +42,11 @@ var mongoose_1 = require("mongoose");
 var bcrypt_1 = __importDefault(require("bcrypt"));
 var config_1 = __importDefault(require("../config"));
 var db_1 = require("../db");
-/**
- * Schema
- */
 var userSchema = new mongoose_1.Schema({
     name: String,
     email: String,
     password: String
 });
-/**
- * Hash the password
- */
 userSchema.pre("save", function (next) {
     return __awaiter(this, void 0, void 0, function () {
         var user, _a;
@@ -60,22 +54,19 @@ userSchema.pre("save", function (next) {
             switch (_b.label) {
                 case 0:
                     user = this;
-                    if (!user.isNew) return [3 /*break*/, 2];
+                    if (!user.isNew) return [3, 2];
                     _a = user;
-                    return [4 /*yield*/, bcrypt_1.default.hash(user.password, config_1.default.BCRYPT_SALT)];
+                    return [4, bcrypt_1.default.hash(user.password, config_1.default.BCRYPT_SALT)];
                 case 1:
                     _a.password = _b.sent();
                     _b.label = 2;
                 case 2:
                     next();
-                    return [2 /*return*/];
+                    return [2];
             }
         });
     });
 });
-/**
- * Compare the password
- */
 userSchema.methods.validatePassword = function (compare) {
     return __awaiter(this, void 0, void 0, function () {
         var user;
@@ -83,8 +74,8 @@ userSchema.methods.validatePassword = function (compare) {
             switch (_a.label) {
                 case 0:
                     user = this;
-                    return [4 /*yield*/, bcrypt_1.default.compare(compare, user.password)];
-                case 1: return [2 /*return*/, _a.sent()];
+                    return [4, bcrypt_1.default.compare(compare, user.password)];
+                case 1: return [2, _a.sent()];
             }
         });
     });

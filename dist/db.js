@@ -6,6 +6,3 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importDefault(require("mongoose"));
 var config_1 = __importDefault(require("./config"));
 exports.db = mongoose_1.default.createConnection(config_1.default.DB, { useNewUrlParser: true });
-//db.then(value => {
-//    console.log("DB connected to", config.DB);
-//})

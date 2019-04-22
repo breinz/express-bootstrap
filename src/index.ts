@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser"
 
 import routers from "./router"
 import { userMiddleware } from "./middleware"
+import config from "./config";
 
 let app = express()
 
@@ -23,14 +24,14 @@ app.set("view engine", "pug")
 app.set('views', path.join(__dirname, '../src/views'));
 
 // Check for a logged in user (populates req.current_user & res.locals.current_user)
-app.use(userMiddleware.saveLoggedInUser);
+app.use(userMiddleware.getCurrentUser);
 
 // Route
 app.use("/", routers.front);
 app.use("/admin", routers.admin);
 
 // Start server
-app.listen(3000, "0.0.0.0", () => {
+app.listen(config.PORT, "0.0.0.0", () => {
     console.log("App running")
 })
 

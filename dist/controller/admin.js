@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var AdminController = /** @class */ (function () {
+var AdminController = (function () {
     function AdminController() {
     }
     AdminController.prototype.index = function (req, res) {

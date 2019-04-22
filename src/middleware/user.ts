@@ -7,8 +7,9 @@ export default class UserMiddleware {
 
     /**
      * Makes sure a user is logged in
+     * TODO: Save path in a cookie to get there after login
      * @param req 
-     * @param res 
+     * @param res
      * @param next
      */
     public loginShield(req: Request, res: Response, next: NextFunction) {
@@ -25,7 +26,7 @@ export default class UserMiddleware {
      * @param res 
      * @param next 
      */
-    public async saveLoggedInUser(req: Request, res: Response, next: NextFunction) {
+    public async getCurrentUser(req: Request, res: Response, next: NextFunction) {
         if (req.cookies.uid) {
             const user = await User.findById(req.cookies.uid) as UserModel;
 

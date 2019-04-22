@@ -40,35 +40,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var user_1 = __importDefault(require("../validator/user"));
 var user_2 = __importDefault(require("../model/user"));
-var UserMiddleware = /** @class */ (function () {
+var UserMiddleware = (function () {
     function UserMiddleware() {
     }
-    /**
-     * Makes sure a user is logged in
-     * @param req
-     * @param res
-     * @param next
-     */
     UserMiddleware.prototype.loginShield = function (req, res, next) {
         if (!req.current_user) {
             return res.redirect("/login");
         }
         next();
     };
-    /**
-     * Adds the logged in user to req & res
-     * @param req
-     * @param res
-     * @param next
-     */
-    UserMiddleware.prototype.saveLoggedInUser = function (req, res, next) {
+    UserMiddleware.prototype.getCurrentUser = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
             var user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!req.cookies.uid) return [3 /*break*/, 2];
-                        return [4 /*yield*/, user_2.default.findById(req.cookies.uid)];
+                        if (!req.cookies.uid) return [3, 2];
+                        return [4, user_2.default.findById(req.cookies.uid)];
                     case 1:
                         user = _a.sent();
                         if (user) {
@@ -78,17 +66,11 @@ var UserMiddleware = /** @class */ (function () {
                         _a.label = 2;
                     case 2:
                         next();
-                        return [2 /*return*/];
+                        return [2];
                 }
             });
         });
     };
-    /**
-     * Valid login form
-     * @param req
-     * @param res
-     * @param next
-     */
     UserMiddleware.prototype.validLogin = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
             var validator;
@@ -96,23 +78,17 @@ var UserMiddleware = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         validator = new user_1.default(req.body);
-                        return [4 /*yield*/, validator.isValidForLogin()];
+                        return [4, validator.isValidForLogin()];
                     case 1:
                         if (!(_a.sent())) {
-                            return [2 /*return*/, res.render("login", { data: req.body, error: true })];
+                            return [2, res.render("login", { data: req.body, error: true })];
                         }
                         next();
-                        return [2 /*return*/];
+                        return [2];
                 }
             });
         });
     };
-    /**
-     * Valid signin form
-     * @param req
-     * @param res
-     * @param next
-     */
     UserMiddleware.prototype.validSignin = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
             var validator;
@@ -120,13 +96,13 @@ var UserMiddleware = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         validator = new user_1.default(req.body);
-                        return [4 /*yield*/, validator.isValidForSignin()];
+                        return [4, validator.isValidForSignin()];
                     case 1:
                         if (!(_a.sent())) {
-                            return [2 /*return*/, res.render("signin", { data: req.body, errors: validator.errors })];
+                            return [2, res.render("signin", { data: req.body, errors: validator.errors })];
                         }
                         next();
-                        return [2 /*return*/];
+                        return [2];
                 }
             });
         });

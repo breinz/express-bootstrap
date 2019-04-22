@@ -51,6 +51,7 @@ export default class UserValidator {
         if (!this.user.name || !this.user.name.length) {
             return this.errors.name = "required"
         }
+
     }
 
     /**

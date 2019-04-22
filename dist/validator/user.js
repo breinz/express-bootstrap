@@ -39,15 +39,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var user_1 = __importDefault(require("../model/user"));
-var UserValidator = /** @class */ (function () {
+var UserValidator = (function () {
     function UserValidator(user) {
         this.email_regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         this.user = user;
         this.errors = {};
     }
-    /**
-     * Is the user valid to get logged in
-     */
     UserValidator.prototype.isValidForLogin = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -55,71 +52,56 @@ var UserValidator = /** @class */ (function () {
                     case 0:
                         this.validateEmail(false);
                         this.validatePassword();
-                        return [4 /*yield*/, this.validateLogin()];
+                        return [4, this.validateLogin()];
                     case 1:
                         _a.sent();
-                        return [2 /*return*/, Object.keys(this.errors).length === 0];
+                        return [2, Object.keys(this.errors).length === 0];
                 }
             });
         });
     };
-    /**
-     * Is the user valid to get signed in
-     */
     UserValidator.prototype.isValidForSignin = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         this.validateName();
-                        return [4 /*yield*/, this.validateEmail(true)];
+                        return [4, this.validateEmail(true)];
                     case 1:
                         _a.sent();
                         this.validatePassword();
                         this.validatePasswordRepeat();
-                        return [2 /*return*/, Object.keys(this.errors).length === 0];
+                        return [2, Object.keys(this.errors).length === 0];
                 }
             });
         });
     };
-    /**
-     * Validate the name
-     * - required
-     */
     UserValidator.prototype.validateName = function () {
         if (!this.user.name || !this.user.name.length) {
             return this.errors.name = "required";
         }
     };
-    /**
-     * Validate email
-     * -required
-     * -valid email
-     * -not taken
-     */
     UserValidator.prototype.validateEmail = function (checkTaken) {
         return __awaiter(this, void 0, void 0, function () {
             var count_user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        // Required
                         if (!this.user.email || !this.user.email.length) {
-                            return [2 /*return*/, this.errors.email = "required"];
+                            return [2, this.errors.email = "required"];
                         }
-                        // Valid
                         if (!this.email_regex.test(this.user.email)) {
-                            return [2 /*return*/, this.errors.email = "invalid"];
+                            return [2, this.errors.email = "invalid"];
                         }
-                        if (!checkTaken) return [3 /*break*/, 2];
-                        return [4 /*yield*/, user_1.default.countDocuments({ email: this.user.email })];
+                        if (!checkTaken) return [3, 2];
+                        return [4, user_1.default.countDocuments({ email: this.user.email })];
                     case 1:
                         count_user = _a.sent();
                         if (count_user > 0) {
-                            return [2 /*return*/, this.errors.email = "taken"];
+                            return [2, this.errors.email = "taken"];
                         }
                         _a.label = 2;
-                    case 2: return [2 /*return*/];
+                    case 2: return [2];
                 }
             });
         });
@@ -139,18 +121,18 @@ var UserValidator = /** @class */ (function () {
             var user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, user_1.default.findOne({ email: this.user.email })];
+                    case 0: return [4, user_1.default.findOne({ email: this.user.email })];
                     case 1:
                         user = _a.sent();
                         if (!user) {
-                            return [2 /*return*/, this.errors.login = "invalid"];
+                            return [2, this.errors.login = "invalid"];
                         }
-                        return [4 /*yield*/, user.validatePassword(this.user.password || "")];
+                        return [4, user.validatePassword(this.user.password || "")];
                     case 2:
                         if (!(_a.sent())) {
-                            return [2 /*return*/, this.errors.login = "invalid"];
+                            return [2, this.errors.login = "invalid"];
                         }
-                        return [2 /*return*/];
+                        return [2];
                 }
             });
         });

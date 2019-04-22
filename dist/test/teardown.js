@@ -42,8 +42,8 @@ module.exports = function () { return __awaiter(_this, void 0, void 0, function 
         connections = mongoose.connections;
         for (_i = 0, connections_1 = connections; _i < connections_1.length; _i++) {
             con = connections_1[_i];
-            return [2 /*return*/, con.close()];
+            return [2, con.close()];
         }
-        return [2 /*return*/, mongoose.disconnect()];
+        return [2, mongoose.disconnect()];
     });
 }); };
