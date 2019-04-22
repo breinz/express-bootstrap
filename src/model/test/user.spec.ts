@@ -3,16 +3,6 @@ import faker from "faker";
 
 describe("UserModel", () => {
 
-    /*beforeAll(async () => {
-        await User.deleteMany({});
-
-        await User.create({
-            name: "Julien Breiner",
-            email: "julien.breiner @gmail.com",
-            password: "pom"
-        });
-    })*/
-
     test("must hash password", async () => {
 
         const data = {
